@@ -6,8 +6,8 @@ WORKDIR /app
 # Copy package files
 COPY package.json yarn.lock* package-lock.json* ./
 
-# Install dependencies
-RUN npm ci || npm install
+# Install dependencies (support missing lockfile + legacy peer deps)
+RUN if [ -f package-lock.json ]; then npm ci; else npm install --legacy-peer-deps; fi
 
 # Copy source code
 COPY . .
